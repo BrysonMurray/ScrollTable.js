@@ -1,0 +1,79 @@
+﻿.scrollTableSectionHeader {
+	font-weight: bold;
+	font-size: 16px;
+	display: inline-block;
+	padding-top: 6px;
+}
+
+.scrollTableHeaders {
+	table-layout: fixed;
+	margin-bottom: 0px;
+	margin-right: 17px;
+	height: 30px;
+}
+
+.scrollTableHeaders th:first-child {
+    border-radius: 4px 0 0 0;
+}
+
+.scrollTableHeaders th:last-child {
+    border-radius: 0 4px 0 0;
+}
+
+.scrollTableHeaders th:only-child{
+    border-radius: 4px 4px 0 0;
+}
+
+.scrollTableHeaders thead {
+	color: white;
+	background-color: #27578C;
+}
+.scrollTableHeaders thead :hover {
+	color: white;	
+	background-color: #27578C !important;
+}
+.scrollTableHeaders thead tr :hover {
+	color: white;
+	background-color: #27578C !important;
+}
+.scrollTableHeaders thead tr th :hover {
+	color: white;
+	text-decoration: underline;
+	background-color: #27578C !important;
+}
+
+.scrollTableHeaders  th {
+	padding: 2px 6px !important;
+	margin: 0px;
+	white-space: nowrap;
+	height: 30px;
+}
+
+.scrollTableBodyContainer {
+	overflow-y: scroll;
+	border-bottom: none; /*1px solid #ddd;*/
+	border-left: none; /*1px solid #ddd;*/
+}
+
+.scrollTableBody {
+	border-collapse:collapse;
+	margin: 0px !important;
+}
+
+.scrollTableBody thead {
+	border-collapse:collapse;
+}
+
+.scrollTableBody th{
+	height: 0px;
+	line-height: 0 !important;
+	visibility: hidden;
+	padding: 0px 6px !important;
+	margin: 0px;
+	border: 0px solid blue;
+	white-space: nowrap;
+}
+
+.table-striped>tbody>tr:nth-child(odd) {
+	background-color: #F1F1F1 !important;
+}
