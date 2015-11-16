@@ -27,16 +27,19 @@
 
 	var GetAllAttributes = function(obj) {
 		var element = $(obj);
-		var attributeString = element.outerHTML().replace(element.html(), " ");
-		//remove the first id attribute  ' id="test-id5"
-		var regex1 = /\sid\s*=\s*"(\w*\d*-*)*"/;
-		attributeString = attributeString.replace(regex1, " ");
-		//remove all '>'
-		attributeString = attributeString.replace(/>/g, " ");
-		//remove all tags like '<div'
-		attributeString = attributeString.replace(/<\S+/g, " ");
-		attributeString = $.trim(attributeString);
-		return attributeString;
+		if (element.html() !== undefined) {
+			var attributeString = element.outerHTML().replace(element.html(), " ");
+			//remove the first id attribute  ' id="test-id5"
+			var regex1 = /\sid\s*=\s*"(\w*\d*-*)*"/;
+			attributeString = attributeString.replace(regex1, " ");
+			//remove all '>'
+			attributeString = attributeString.replace(/>/g, " ");
+			//remove all tags like '<div'
+			attributeString = attributeString.replace(/<\S+/g, " ");
+			attributeString = $.trim(attributeString);
+			return attributeString;
+		}
+		return "";
 	}
 
 	var BuildScrollTable = function(origTable, settings) {
