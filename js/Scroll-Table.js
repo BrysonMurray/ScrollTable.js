@@ -106,25 +106,24 @@
 		var contentTableHeaders = contentTableId + " th";
 		var headerTableThs = $(headerTableHeaders);
 		var contentTableThs = $(contentTableHeaders);
-		
-		$(headerTableThs).each(function (index) {
-			//if (index < headerTableThs.length - 1) {  
-			if (index < headerTableThs.length -1) {  
-												  
-				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
-			}
-		});
-		
+
+		var indexOffset = 1;		
+
 		// In Firefox 2.0
 		// Tables in Firefox 2.0 need all column sizes specified. they donot auto fill to the space remaining 
 		// so the new table header needs the last item to be sized only in Firefox 2.0. 
 		// Sizing all of them causes isues in chrome and other latest browsers where the column alignment is off.
 		// So we need to size the last col for FireFox 2.0 only
 		if (navigator.userAgent.indexOf("Firefox/2.0") != -1) {
-			$(headerTableThs).last(function (index) {
-				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
-			});
+			indexOffset = 0;
 		}
+
+		$(headerTableThs).each(function (index) {
+			if (index < headerTableThs.length - indexOffset) {  
+												  
+				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
+			}
+		});
 	}
     
     	$.fn.DOSify = function() {
@@ -163,7 +162,7 @@
 
 		    $(headerTableId + ' thead tr th').click(function (e) {
 		    	var col = $(this).parent().children().index($(this));
-			    var corespondingHeader = $(origTableId).find("thead tr th:nth-child(" + (col - 1) + ")");
+			    var corespondingHeader = $(origTableId).find("thead tr th:nth-child(" + (col + 1) + ")");
 		    	$(corespondingHeader).click();
 		    });
 
