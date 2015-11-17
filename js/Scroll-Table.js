@@ -1,6 +1,5 @@
 ﻿$(function ($) {
 
-	// this is for future functionality 
 	var setInitialWidth = function(propertyString, initialWidth) {
 		var allWidthCount = propertyString.match(/width/g).length;			// counts all occurances of 'width'
 		var otherWidthPropCount = propertyString.match(/-width/g).length;	// counts all occurances of '-width'
@@ -51,6 +50,7 @@
 
 		origTable.wrap('<div id="' + tableContainerId + '"></div>');
 		var container = $('#' + tableContainerId);
+		origTable = $('#' + origTable.attr('id'));
 
 
 		var tableTitleHeaderString = "";
@@ -64,14 +64,17 @@
 
 		origTable.wrap('<div id="' + bodyTableDivId + '" class="scrollTableBodyContainer table-responsive"></div>');
 		var bodyTableDiv = $('#' + bodyTableDivId);
+		origTable =	$('#' + origTable.attr('id'));
 
 		//add ScrollTable classes to tables
 		headerTable.addClass("scrollTableHeaders table table-striped table-hover table-responsive");
-		$('#'+origTable.attr('id')).addClass("scrollTableBody table table-striped table-hover table-responsive");
+		origTable.addClass("scrollTableBody table table-striped table-hover table-responsive");
+		//$('#'+origTable.attr('id')).addClass("scrollTableBody table table-striped table-hover table-responsive");
 
 
 		//add headers to the tables
 		var origTableHeader = origTable.find("thead").outerHTML();
+		//var origTableHeader = $('#' + origTable.attr('id')).find("thead").outerHTML();
 		headerTable.AppendHtml(origTableHeader);
 
 		return container;
@@ -103,13 +106,25 @@
 		var contentTableHeaders = contentTableId + " th";
 		var headerTableThs = $(headerTableHeaders);
 		var contentTableThs = $(contentTableHeaders);
+		
 		$(headerTableThs).each(function (index) {
-			//if (index < headerTableThs.length - 1) {  not sure why but firefox 2 needs the last item to be sized.
-			if (index < headerTableThs.length) {  //	this might cause isues in chrome and other latest browsers we may need to 
-												  //	size the last col first and then the rest of the columns to fix this if it causes an issue
+			//if (index < headerTableThs.length - 1) {  
+			if (index < headerTableThs.length -1) {  
+												  
 				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
 			}
 		});
+		
+		// In Firefox 2.0
+		// Tables in Firefox 2.0 need all column sizes specified. they donot auto fill to the space remaining 
+		// so the new table header needs the last item to be sized only in Firefox 2.0. 
+		// Sizing all of them causes isues in chrome and other latest browsers where the column alignment is off.
+		// So we need to size the last col for FireFox 2.0 only
+		if (navigator.userAgent.indexOf("Firefox/2.0") != -1) {
+			$(headerTableThs).last(function (index) {
+				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
+			});
+		}
 	}
     
     	$.fn.DOSify = function() {
