@@ -31,6 +31,11 @@
 			//remove the first id attribute  ' id="test-id5"
 			var regex1 = /\sid\s*=\s*"(\w*\d*-*)*"/;
 			attributeString = attributeString.replace(regex1, " ");
+			//var remove width this will be calculated later
+			var regex2 = /\swidth\s*:\s*(\w*\d*-*)*%*;/;
+			attributeString = attributeString.replace(regex2, " ");
+			var regex3 = /"width\s*:\s*(\w*\d*-*)*%*;/;
+			attributeString = attributeString.replace(regex3, "\"");
 			//remove all '>'
 			attributeString = attributeString.replace(/>/g, " ");
 			//remove all tags like '<div'
@@ -48,7 +53,7 @@
 		var headerTableId = origTable.attr("id") + '-ScrollTable-Header';
 		var bodyTableDivId = origTable.attr("id") + '-ScrollTableDiv';
 
-		origTable.wrap('<div id="' + tableContainerId + '"></div>');
+		origTable.wrap('<div id="' + tableContainerId + '" class="ScrollTable-Container" ></div>');
 		var container = $('#' + tableContainerId);
 		origTable = $('#' + origTable.attr('id'));
 
@@ -57,25 +62,33 @@
 		if (settings.title != null && $.trim(settings.title) != "") {
 			tableTitleHeaderString = ('<div id="' + tableTitleId + '" class="scrollTableSectionHeader">' + settings.title + '</div>');
 		}
-		tableTitleHeaderString += '<table id="' + headerTableId + '" ' + GetAllAttributes(origTable) + '></table>';
+		tableTitleHeaderString += '<table id="' + headerTableId + '" ' + GetAllAttributes(origTable) + ' class="scrollTableHeaders" style" width: '+$(tableContainerId).css("width")+'; max-width: '+$(tableContainerId).css("width")+';"></table>';
 		// append header table with id
 		container.PrependHtml(tableTitleHeaderString);
 		var headerTable = $('#' + headerTableId);
-
-		origTable.wrap('<div id="' + bodyTableDivId + '" class="scrollTableBodyContainer table-responsive"></div>');
+		$('#' + origTable.attr('id')).wrap('<div id="' + bodyTableDivId + '" style=" max-height: ' + settings.height + '; width: ' + ($('#' + origTable.attr('id')).width() - 2) + 'px  ;"class="scrollTableBodyContainer table-responsive"></div>');
 		var bodyTableDiv = $('#' + bodyTableDivId);
-		origTable =	$('#' + origTable.attr('id'));
+		origTable = $('#' + origTable.attr('id'));
+
+		//toScrollOrNotToScroll
+		if (settings.height !== "auto" && $('#' + origTable.attr('id')).height() > $('#' + bodyTableDivId).height) {
+			$('#' + bodyTableDivId).css('overflow-y','scroll');
+		}
 
 		//add ScrollTable classes to tables
 		headerTable.addClass("scrollTableHeaders table table-striped table-hover table-responsive");
-		origTable.addClass("scrollTableBody table table-striped table-hover table-responsive");
-		//$('#'+origTable.attr('id')).addClass("scrollTableBody table table-striped table-hover table-responsive");
 
+		
+
+		$('#' + origTable.attr('id')).addClass("scrollTableBody table table-striped table-hover table-responsive");
 
 		//add headers to the tables
 		var origTableHeader = origTable.find("thead").outerHTML();
-		//var origTableHeader = $('#' + origTable.attr('id')).find("thead").outerHTML();
+
 		headerTable.AppendHtml(origTableHeader);
+
+		$(headerTable).find('th').first().addClass("firstTh");
+		$(headerTable).find('th').last().addClass("lastTh");
 
 		return container;
 	};
@@ -103,25 +116,20 @@
 
 	var AlignTableHeaders = function(headerTableId, contentTableId) {
 		var headerTableHeaders = headerTableId + " th";
-		var contentTableHeaders = contentTableId + " th";
+		var contentTableHeaders = contentTableId + " tbody tr:first td";
 		var headerTableThs = $(headerTableHeaders);
 		var contentTableThs = $(contentTableHeaders);
 
-		var indexOffset = 1;		
-
-		// In Firefox 2.0
-		// Tables in Firefox 2.0 need all column sizes specified. they donot auto fill to the space remaining 
-		// so the new table header needs the last item to be sized only in Firefox 2.0. 
-		// Sizing all of them causes isues in chrome and other latest browsers where the column alignment is off.
-		// So we need to size the last col for FireFox 2.0 only
-		if (navigator.userAgent.indexOf("Firefox/2.0") != -1) {
-			indexOffset = 0;
-		}
+		var indexOffset = 1;
 
 		$(headerTableThs).each(function (index) {
-			if (index < headerTableThs.length - indexOffset) {  
-												  
+			
+			$(this).css("padding-left", $($(contentTableThs).get(index)).css("padding-left"));
+			$(this).css("padding-right", $($(contentTableThs).get(index)).css("padding-right"));
+			if (index < headerTableThs.length - indexOffset) {
+				// this not is the last th
 				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
+
 			}
 		});
 	}
@@ -142,23 +150,39 @@
 			    tableBacgroundColor: "white",
 			    tableAltBacgroundColor: "grey",
 			    alternateBackground: true,
+			    height: "auto",
+			    fontSize: "9pt",
+				padding: "2px 6px"
 
-			    // comming soon features
-			    //useCustomColumnOrder: false,
-			    //customColOrder: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-			    //clickableColumns: [], // columns need data-href property
-			    //columns: [],
-			    //headerRowsClickable: false,
-			    //tableRowsClickable: true,//the data-href prop must be set fot this to work
-			    //rowProperties: []
+		    // comming soon features
+		    //useCustomColumnOrder: false,
+		    //customColOrder: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+		    //clickableColumns: [], // columns need data-href property
+		    //columns: [],
+		    //headerRowsClickable: false,
+		    //tableRowsClickable: true,//the data-href prop must be set fot this to work
+		    //rowProperties: []
 		    }, options);
+
+		    
     		
     		var scrollTable = BuildScrollTable(this, settings);
 
     		SetupScrollTableClickEvents(scrollTable, settings);
 
-		    var headerTableId = '#' + this.attr("id") + '-ScrollTable-Header';
+			// Apply Settings
+			var bodyTableDivId = origTableId + '-ScrollTableDiv';
+
+    		$(bodyTableDivId + " table tbody tr td").css('font-size', settings.fontSize);
+    		$(bodyTableDivId + " table tbody tr td").css('padding', settings.padding);
+
+		    
 		    var origTableId = '#' + this.attr("id");
+		    var tableContainerId = origTableId + '-ScrollTable-Container';
+		    var headerTableId = '#' + this.attr("id") + '-ScrollTable-Header';
+			
+		    $(headerTableId).css("width", $(tableContainerId).css("width"));
+		    $(headerTableId).css("max-width", $(tableContainerId).css("width"));
 
 		    $(headerTableId + ' thead tr th').click(function (e) {
 		    	var col = $(this).parent().children().index($(this));
@@ -166,8 +190,15 @@
 		    	$(corespondingHeader).click();
 		    });
 
-		    AlignTableHeaders(headerTableId, origTableId);
+		    $(origTableId).attr('style', 'border: 0px; border-spacing: 0 !important; ');
+		    $(origTableId + ' thead').addClass('hiddenOrigTableHeader');
+		    $(origTableId + ' thead tr').addClass('hiddenOrigTableHeader');
+		    $(origTableId + ' td').css('padding-top', '2px');
+		    $(origTableId + ' td').css('padding-bottom', '2px');
 
+		    $(headerTableId + ' th').css('vertical-align', 'middle');
+			
+		    AlignTableHeaders(headerTableId, origTableId, true);
     		return this;
     	};
 }(jQuery));

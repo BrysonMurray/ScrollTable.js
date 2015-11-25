@@ -1,4 +1,8 @@
-﻿.scrollTableSectionHeader {
+﻿.ScrollTable-Container {
+	overflow-x: hidden;
+}
+
+.scrollTableSectionHeader {
 	font-weight: bold;
 	font-size: 16px;
 	display: inline-block;
@@ -12,52 +16,121 @@
 	height: 30px;
 }
 
-.scrollTableHeaders th:first-child {
-    border-radius: 4px 0 0 0;
+.ScrollTable-Container thead.hiddenOrigTableHeader,
+.ScrollTable-Container thead.hiddenOrigTableHeader tr.hiddenOrigTableHeader{
+	border: none; 
+	height: 0px;
+	border-spacing: 0 !important;
+	border-color: red;
 }
 
-.scrollTableHeaders th:last-child {
+.ScrollTable-Container table.scrollTableHeaders,
+.ScrollTable-Container table.scrollTableBody{
+	border: 0px solid red;
+}
+
+.ScrollTable-Container .scrollTableHeaders thead tr th,
+.ScrollTable-Container .scrollTableBody thead tr th {
+	border-bottom: 0px solid red;
+}
+
+.ScrollTable-Container .scrollTableHeaders thead tr th {
+	padding-top: 3px !important;
+	padding-bottom: 3px !important;
+	padding: 3px 6px;
+	margin: 0px;
+	white-space: nowrap;
+	height: 22px;
+}
+
+.scrollTableHeaders th:first-child,
+.scrollTableHeaders th.firstTh {
+    border-radius: 4px 0 0 0;
+		-moz-border-radius: 4px 0 0 0;
+		-webkit-border-radius: 4px 0 0 0;
+		-o-border-radius: 4px 0 0 0;
+}
+
+.scrollTableHeaders th:last-child,
+.scrollTableHeaders th.lastTh {
     border-radius: 0 4px 0 0;
+		-moz-border-radius: 0 4px 0 0;
+		-webkit-border-radius: 0 4px 0 0;
+		-o-border-radius: 0 4px 0 0;
 }
 
 .scrollTableHeaders th:only-child{
     border-radius: 4px 4px 0 0;
+		-moz-border-radius: 4px 4px 0 0;
+		-webkit-border-radius: 4px 4px 0 0;
+		-o-border-radius: 4px 4px 0 0;
 }
 
-.scrollTableHeaders thead {
+.scrollTableHeaders thead tr th{
 	color: white;
-	background-color: #27578C;
+	background-color: #30588E;
 }
-.scrollTableHeaders thead :hover {
-	color: white;	
-	background-color: #27578C !important;
-}
+
 .scrollTableHeaders thead tr :hover {
 	color: white;
-	background-color: #27578C !important;
-}
-.scrollTableHeaders thead tr th :hover {
-	color: white;
 	text-decoration: underline;
-	background-color: #27578C !important;
+	background-color: #30588E !important;
+	cursor: pointer;
 }
-
-.scrollTableHeaders  th {
-	padding: 2px 6px !important;
-	margin: 0px;
-	white-space: nowrap;
-	height: 30px;
+.scrollTableHeaders thead th :hover {
+	text-decoration: underline;
+	background-color: #30588E !important;
 }
 
 .scrollTableBodyContainer {
-	overflow-y: scroll;
-	border-bottom: none; /*1px solid #ddd;*/
-	border-left: none; /*1px solid #ddd;*/
+	font-size: 11px;
+	border-bottom: 1px solid #DDDDDD;
+	border-left:1px solid #DDDDDD;
+	border-right:1px solid #DDDDDD;
+}
+
+.scrollTableBodyContainer td{
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.scrollTableBodyContainer tbody :hover{
+	background-color: #A8CAEC !important;
+	color: white;
+	cursor: pointer;
+}
+
+.scrollTableBodyContainer tbody :hover{
+	background-color: #A8CAEC !important;
+	color: white;
+	cursor: pointer;
+}
+
+.scrollTableBodyContainer::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.scrollTableBodyContainer::-webkit-scrollbar {
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+.scrollTableBodyContainer::-webkit-scrollbar-thumb {
+    background-color: #30588E;
+    background-image: -webkit-gradient(linear, 0 203, 0 100%, color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.5, transparent), to(transparent));
 }
 
 .scrollTableBody {
 	border-collapse:collapse;
 	margin: 0px !important;
+	font-size: 11px;
+}
+
+.scrollTableBody {
+	border-collapse:collapse;
+	margin: 0px !important;
+	font-size: 11px;
 }
 
 .scrollTableBody thead {
@@ -75,5 +148,5 @@
 }
 
 .table-striped>tbody>tr:nth-child(odd) {
-	background-color: #F1F1F1 !important;
+	background-color: #F1F1F1;
 }
