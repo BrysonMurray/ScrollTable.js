@@ -122,13 +122,13 @@
 
 		var indexOffset = 1;
 
-		$(headerTableThs).each(function (index) {
+		$(headerTableThs).each(function (index, element) {
 			
-			$(this).css("padding-left", $($(contentTableThs).get(index)).css("padding-left"));
-			$(this).css("padding-right", $($(contentTableThs).get(index)).css("padding-right"));
+			$(element).css("padding-left", $($(contentTableThs).get(index)).css("padding-left"));
+			$(element).css("padding-right", $($(contentTableThs).get(index)).css("padding-right"));
 			if (index < headerTableThs.length - indexOffset) {
 				// this not is the last th
-				$(this).css("width", $($(contentTableThs).get(index)).css("width"));
+				$(element).css("width", $($(contentTableThs).get(index)).css("width"));
 
 			}
 		});
